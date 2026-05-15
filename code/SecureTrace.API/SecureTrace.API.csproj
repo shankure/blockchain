@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>SecureTrace.API</RootNamespace>
+    <UserSecretsId>bda6df34-f40b-41d0-ac09-5e46f0783b8f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
