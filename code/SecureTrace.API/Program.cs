@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SecureTrace.API.Data;
+using SecureTrace.API.Repositories;
 using SecureTrace.API.Services;
 using System.Text;
 
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // ── Database: MongoDB (Audit Ledger) ─────────────────────────────────────────
 builder.Services.AddSingleton<MongoDbContext>();
+
+// ── Repositories ─────────────────────────────────────────────────────────────
+builder.Services.AddScoped<ICaseRepository,     CaseRepository>();
+builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
 // ── Application Services ──────────────────────────────────────────────────────
 builder.Services.AddScoped<IJwtService,  JwtService>();

@@ -50,7 +50,7 @@ public class AuthService : IAuthService
         await _db.SaveChangesAsync();
 
         // 5. Return a ready-to-use token so the client can log in immediately after registering
-        return BuildAuthResponse(user);
+        return BuildAuthResponse(user); // Take this newly created user and prepare the login/token response.
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
@@ -67,15 +67,15 @@ public class AuthService : IAuthService
         if (!user.IsActive)
             throw new UnauthorizedAccessException("This account has been deactivated.");
 
-        return BuildAuthResponse(user);
+        return BuildAuthResponse(user); // Take this newly created user and prepare the login/token response.
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private AuthResponse BuildAuthResponse(User user)
     {
-        var expiresInMinutes = int.Parse(_config["Jwt:ExpiresInMinutes"] ?? "60");
-        var token            = _jwt.GenerateToken(user);
+        var expiresInMinutes = int.Parse(_config["Jwt:ExpiresInMinutes"] ?? "60"); // read JWT expiration from configuration
+        var token            = _jwt.GenerateToken(user); // calls your JWT service.
 
         return new AuthResponse(
             Token:     token,
