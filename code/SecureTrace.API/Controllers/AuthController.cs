@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SecureTrace.API.DTOs;
-using SecureTrace.API.Services;
+using SecureTrace.API.Services.Interfaces;
 
 namespace SecureTrace.API.Controllers;
 

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SecureTrace.API.DTOs;
 using SecureTrace.API.Models;
-using SecureTrace.API.Repositories;
+using SecureTrace.API.Repositories.Interfaces;
 using System.Security.Claims;
 
 namespace SecureTrace.API.Controllers;

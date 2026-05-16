@@ -1,6 +1,6 @@
 using SecureTrace.API.DTOs;
 
-namespace SecureTrace.API.Services;
+namespace SecureTrace.API.Services.Interfaces;
 
 public interface IAuthService
 {

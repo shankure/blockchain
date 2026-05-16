@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SecureTrace.API.Data;
 using SecureTrace.API.Repositories;
+using SecureTrace.API.Repositories.Interfaces;
 using SecureTrace.API.Services;
+using SecureTrace.API.Services.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +23,10 @@ builder.Services.AddScoped<ICaseRepository,     CaseRepository>();
 builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
 // ── Application Services ──────────────────────────────────────────────────────
-builder.Services.AddScoped<IJwtService,  JwtService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtService,        JwtService>();
+builder.Services.AddScoped<IAuthService,       AuthService>();
+builder.Services.AddScoped<ICryptographyService, CryptographyService>();
+builder.Services.AddScoped<IAuditService,      AuditService>();
 
 // ── JWT Authentication ────────────────────────────────────────────────────────
 var jwtKey = builder.Configuration["Jwt:Key"]

@@ -1,6 +1,6 @@
 using SecureTrace.API.Models;
 
-namespace SecureTrace.API.Repositories;
+namespace SecureTrace.API.Repositories.Interfaces;
 
 public interface ICaseRepository
 {

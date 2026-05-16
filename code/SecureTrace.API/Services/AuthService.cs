@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SecureTrace.API.Data;
 using SecureTrace.API.DTOs;
 using SecureTrace.API.Models;
+using SecureTrace.API.Services.Interfaces;
 
 namespace SecureTrace.API.Services;
 

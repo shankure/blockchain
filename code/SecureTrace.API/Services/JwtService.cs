@@ -1,5 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 using SecureTrace.API.Models;
+using SecureTrace.API.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
