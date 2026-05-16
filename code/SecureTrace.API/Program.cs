@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SecureTrace.API.Data;
+using SecureTrace.API.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // ── Database: MongoDB (Audit Ledger) ─────────────────────────────────────────
 builder.Services.AddSingleton<MongoDbContext>();
+
+// ── Application Services ──────────────────────────────────────────────────────
+builder.Services.AddScoped<IJwtService,  JwtService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // ── JWT Authentication ────────────────────────────────────────────────────────
 var jwtKey = builder.Configuration["Jwt:Key"]
