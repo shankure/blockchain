@@ -25,8 +25,9 @@ builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 // ── Application Services ──────────────────────────────────────────────────────
 builder.Services.AddScoped<IJwtService,        JwtService>();
 builder.Services.AddScoped<IAuthService,       AuthService>();
-builder.Services.AddScoped<ICryptographyService, CryptographyService>();
-builder.Services.AddScoped<IAuditService,      AuditService>();
+builder.Services.AddScoped<ICryptographyService,  CryptographyService>();
+builder.Services.AddScoped<IAuditService,         AuditService>();
+builder.Services.AddScoped<IVerificationService,  VerificationService>();
 
 // ── JWT Authentication ────────────────────────────────────────────────────────
 var jwtKey = builder.Configuration["Jwt:Key"]

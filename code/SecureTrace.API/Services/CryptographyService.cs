@@ -19,13 +19,13 @@ public class CryptographyService : ICryptographyService
     }
 
     public string BuildBlockPayload(
-        int blockIndex,
-        DateTime timestamp,
-        int evidenceId,
-        string actionType,
-        string evidenceSnapshot,
-        string actorEmail,
-        string previousHash)
+    int blockIndex,
+    DateTime timestamp,
+    int evidenceId,
+    string actionType,
+    string evidenceSnapshot,
+    string actorEmail,
+    string previousHash)
     {
         // We concatenate all fields with a pipe separator.
         // The separator prevents ambiguity — without it,
@@ -35,6 +35,14 @@ public class CryptographyService : ICryptographyService
         // IMPORTANT: This exact format must be used in the
         // verification engine too, otherwise re-computed hashes
         // will not match the stored ones.
-        return $"{blockIndex}|{timestamp:O}|{evidenceId}|{actionType}|{evidenceSnapshot}|{actorEmail}|{previousHash}";
+
+        // Normalize to milliseconds to avoid precision differences
+        // between how DateTime is stored vs retrieved from MongoDB
+        var normalizedTimestamp = new DateTime(
+            timestamp.Ticks / TimeSpan.TicksPerMillisecond * TimeSpan.TicksPerMillisecond,
+            DateTimeKind.Utc
+        );
+
+        return $"{blockIndex}|{normalizedTimestamp:O}|{evidenceId}|{actionType}|{evidenceSnapshot}|{actorEmail}|{previousHash}";
     }
 }
