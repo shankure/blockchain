@@ -6,10 +6,17 @@ namespace SecureTrace.API.Data;
 /// <summary>
 /// Provides access to MongoDB collections.
 /// Registered as a singleton in Program.cs.
+/// The protected constructor and virtual property allow Moq to mock this
+/// class in unit tests without needing a real MongoDB connection.
 /// </summary>
 public class MongoDbContext
 {
-    private readonly IMongoDatabase _database;
+    private readonly IMongoDatabase? _database;
+
+    /// <summary>
+    /// Parameterless constructor used by Moq for unit testing only.
+    /// </summary>
+    protected MongoDbContext() { }
 
     public MongoDbContext(IConfiguration configuration)
     {
@@ -22,16 +29,15 @@ public class MongoDbContext
         var client = new MongoClient(connectionString);
         _database = client.GetDatabase(databaseName);
 
-        // Ensure the BlockIndex field has an ascending unique index
-        // so block ordering is always deterministic and fast to query
         EnsureIndexes();
     }
 
     /// <summary>
     /// The cryptographic audit ledger collection.
+    /// Virtual so Moq can override it in unit tests.
     /// </summary>
-    public IMongoCollection<AuditBlock> AuditBlocks =>
-        _database.GetCollection<AuditBlock>("audit_blocks");
+    public virtual IMongoCollection<AuditBlock> AuditBlocks =>
+        _database!.GetCollection<AuditBlock>("audit_blocks");
 
     private void EnsureIndexes()
     {

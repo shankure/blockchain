@@ -3,8 +3,19 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# ASP.NET Core secrets
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.local.json
+secrets.json
+**/secrets.json
+
 # dotenv files
 .env
+.env.*
+*.env
+*.log
+logs/
 
 # User-specific files
 *.rsuser
