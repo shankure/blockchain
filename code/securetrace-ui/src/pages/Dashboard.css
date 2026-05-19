@@ -1,0 +1,65 @@
+.case-count {
+  font-size: 14px;
+  color: #6c757d;
+  background: #e9ecef;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.case-card {
+  border-left: 4px solid #1a1a2e;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.case-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.case-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.case-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  letter-spacing: 0.5px;
+}
+
+.case-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.case-description {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.case-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #adb5bd;
+  margin-bottom: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: #6c757d;
+}
