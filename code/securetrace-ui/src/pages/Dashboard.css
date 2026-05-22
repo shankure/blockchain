@@ -58,6 +58,17 @@
   margin-bottom: 16px;
 }
 
+.case-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.case-actions .btn-primary,
+.case-actions .btn-danger {
+  flex: 1;
+}
+
 .empty-state {
   text-align: center;
   padding: 48px;

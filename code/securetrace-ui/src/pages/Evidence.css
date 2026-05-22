@@ -62,6 +62,27 @@
   color: #adb5bd;
 }
 
+.btn-icon {
+  background: none;
+  border: 1.5px solid #dee2e6;
+  border-radius: 6px;
+  padding: 3px 7px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s, border-color 0.15s;
+  line-height: 1.4;
+}
+
+.btn-icon:hover {
+  background: #f0f2f5;
+  border-color: #adb5bd;
+}
+
+.btn-icon-danger:hover {
+  background: #f8d7da;
+  border-color: #e74c3c;
+}
+
 .evidence-title {
   font-size: 17px;
   font-weight: 700;

@@ -8,14 +8,15 @@ import { useAuth } from '../context/AuthContext';
 import './Dashboard.css';
 
 export default function Dashboard() {
-  const [cases,       setCases]       = useState([]);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState('');
-  const [showCreate,  setShowCreate]  = useState(false);
+  const [cases,      setCases]      = useState([]);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState('');
+  const [showCreate, setShowCreate] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
-  const { user }  = useAuth();
-  const navigate  = useNavigate();
-  const isAdmin   = user?.role === 'Admin';
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const isAdmin  = user?.role === 'Admin';
 
   useEffect(() => {
     api.get('/api/cases')
@@ -28,6 +29,19 @@ export default function Dashboard() {
     setCases(prev => [newCase, ...prev]);
   };
 
+  const handleDeleteCase = async (id, title) => {
+    if (!window.confirm(`Delete case "${title}"?\n\nThis will also delete all evidence linked to this case. This cannot be undone.`)) return;
+    setDeletingId(id);
+    try {
+      await api.delete(`/api/cases/${id}`);
+      setCases(prev => prev.filter(c => c.id !== id));
+    } catch {
+      alert('Failed to delete case. Make sure you are logged in as Admin.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   const statusBorder = (status) => {
     const map = { Open: '#2ecc71', Closed: '#e74c3c', Archived: '#adb5bd' };
     return map[status] || '#adb5bd';
@@ -38,7 +52,6 @@ export default function Dashboard() {
       <Navbar />
       <div className="page-container">
 
-        {/* Header */}
         <div className="page-header">
           <h1>📁 Cases</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -53,7 +66,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Stats Banner */}
         <StatsBanner />
 
         {error   && <div className="error-msg">{error}</div>}
@@ -70,7 +82,6 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Cases Grid */}
         <div className="cases-grid">
           {cases.map(c => (
             <div
@@ -93,18 +104,28 @@ export default function Dashboard() {
                 <span>📅 {new Date(c.createdAt).toLocaleDateString()}</span>
               </div>
 
-              <button
-                className="btn-primary"
-                onClick={() => navigate(`/evidence/${c.id}`)}
-              >
-                View Evidence
-              </button>
+              <div className="case-actions">
+                <button
+                  className="btn-primary"
+                  onClick={() => navigate(`/evidence/${c.id}`)}
+                >
+                  View Evidence
+                </button>
+                {isAdmin && (
+                  <button
+                    className="btn-danger"
+                    onClick={() => handleDeleteCase(c.id, c.title)}
+                    disabled={deletingId === c.id}
+                  >
+                    {deletingId === c.id ? 'Deleting...' : 'Delete'}
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Create Case Modal */}
       {showCreate && (
         <CreateCaseModal
           onClose={() => setShowCreate(false)}

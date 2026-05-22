@@ -3,20 +3,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api/axios';
 import Navbar from '../components/Navbar';
 import CreateEvidenceModal from '../components/CreateEvidenceModal';
+import EditEvidenceModal from '../components/EditEvidenceModal';
 import { useAuth } from '../context/AuthContext';
 import './Evidence.css';
 
 export default function Evidence() {
-  const { caseId }                    = useParams();
-  const [evidences,   setEvidences]   = useState([]);
-  const [caseInfo,    setCaseInfo]     = useState(null);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState('');
-  const [showUpload,  setShowUpload]  = useState(false);
+  const { caseId }                      = useParams();
+  const [evidences,    setEvidences]    = useState([]);
+  const [caseInfo,     setCaseInfo]     = useState(null);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState('');
+  const [showUpload,   setShowUpload]   = useState(false);
+  const [editTarget,   setEditTarget]   = useState(null);  // evidence item being edited
+  const [deletingId,   setDeletingId]   = useState(null);
 
   const { user }  = useAuth();
   const navigate  = useNavigate();
+  const isAdmin   = user?.role === 'Admin';
   const canUpload = user?.role === 'Admin' || user?.role === 'User';
+  const canEdit   = user?.role === 'Admin' || user?.role === 'User';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,22 +45,33 @@ export default function Evidence() {
     setEvidences(prev => [newEvidence, ...prev]);
   };
 
-  const typeIcon = (type) => {
-    const icons = { Photo: '📷', Video: '🎥', Document: '📄', Other: '📦' };
-    return icons[type] || '📦';
+  const handleEvidenceUpdated = (updatedEvidence) => {
+    setEvidences(prev =>
+      prev.map(e => e.id === updatedEvidence.id ? updatedEvidence : e)
+    );
   };
 
-  const typeColor = (type) => {
-    const colors = { Photo: '#e74c3c', Video: '#9b59b6', Document: '#3498db', Other: '#f39c12' };
-    return colors[type] || '#6c757d';
+  const handleDeleteEvidence = async (id, title) => {
+    if (!window.confirm(`Delete evidence "${title}"?\n\nThis cannot be undone.`)) return;
+    setDeletingId(id);
+    try {
+      await api.delete(`/api/evidence/${id}`);
+      setEvidences(prev => prev.filter(e => e.id !== id));
+    } catch {
+      alert('Failed to delete evidence.');
+    } finally {
+      setDeletingId(null);
+    }
   };
+
+  const typeIcon  = (type) => ({ Photo: '📷', Video: '🎥', Document: '📄', Other: '📦' }[type] || '📦');
+  const typeColor = (type) => ({ Photo: '#e74c3c', Video: '#9b59b6', Document: '#3498db', Other: '#f39c12' }[type] || '#6c757d');
 
   return (
     <>
       <Navbar />
       <div className="page-container">
 
-        {/* Header */}
         <div className="page-header">
           <div>
             <button className="btn-secondary back-btn" onClick={() => navigate('/dashboard')}>
@@ -79,7 +95,6 @@ export default function Evidence() {
           </div>
         </div>
 
-        {/* Closed case notice */}
         {caseInfo?.status === 'Closed' && (
           <div className="closed-notice">
             🔒 This case is closed. No new evidence can be uploaded.
@@ -105,12 +120,13 @@ export default function Evidence() {
           </div>
         )}
 
-        {/* Evidence list */}
         <div className="evidence-list">
           {evidences.map(e => (
-            <div key={e.id} className="evidence-card card"
-              style={{ borderLeftColor: typeColor(e.evidenceType) }}>
-
+            <div
+              key={e.id}
+              className="evidence-card card"
+              style={{ borderLeftColor: typeColor(e.evidenceType) }}
+            >
               <div className="evidence-header">
                 <div className="evidence-type">
                   <span className="type-icon">{typeIcon(e.evidenceType)}</span>
@@ -118,7 +134,32 @@ export default function Evidence() {
                     {e.evidenceType}
                   </span>
                 </div>
-                <span className="evidence-id">#{e.id}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span className="evidence-id">#{e.id}</span>
+
+                  {/* Edit button — Admin and User */}
+                  {canEdit && (
+                    <button
+                      className="btn-icon"
+                      title="Edit evidence"
+                      onClick={() => setEditTarget(e)}
+                    >
+                      ✏️
+                    </button>
+                  )}
+
+                  {/* Delete button — Admin only */}
+                  {isAdmin && (
+                    <button
+                      className="btn-icon btn-icon-danger"
+                      title="Delete evidence"
+                      onClick={() => handleDeleteEvidence(e.id, e.title)}
+                      disabled={deletingId === e.id}
+                    >
+                      {deletingId === e.id ? '⏳' : '🗑️'}
+                    </button>
+                  )}
+                </div>
               </div>
 
               <h3 className="evidence-title">{e.title}</h3>
@@ -135,13 +176,20 @@ export default function Evidence() {
         </div>
       </div>
 
-      {/* Upload Evidence Modal */}
       {showUpload && caseInfo && (
         <CreateEvidenceModal
           caseId={parseInt(caseId)}
           caseNumber={caseInfo.caseNumber}
           onClose={() => setShowUpload(false)}
           onCreated={handleEvidenceCreated}
+        />
+      )}
+
+      {editTarget && (
+        <EditEvidenceModal
+          evidence={editTarget}
+          onClose={() => setEditTarget(null)}
+          onUpdated={handleEvidenceUpdated}
         />
       )}
     </>
