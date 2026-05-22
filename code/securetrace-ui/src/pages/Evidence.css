@@ -89,3 +89,25 @@
   padding: 48px;
   color: #6c757d;
 }
+
+.closed-notice {
+  background: #f8d7da;
+  border: 1.5px solid #f5c6cb;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.archived-notice {
+  background: #e2e3e5;
+  border: 1.5px solid #d6d8db;
+  color: #383d41;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}

@@ -1,0 +1,67 @@
+.stats-banner {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 20px 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 28px;
+  gap: 0;
+}
+
+.stat-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1;
+}
+
+.stat-value.chain-status.valid   { color: #155724; }
+.stat-value.chain-status.invalid { color: #721c24; }
+
+.stat-label {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.sub-open    { color: #155724; font-weight: 600; }
+.sub-closed  { color: #721c24; font-weight: 600; }
+.sub-neutral { color: #6c757d; }
+.sub-divider { color: #adb5bd; }
+
+.stat-divider {
+  width: 1px;
+  height: 52px;
+  background: #e9ecef;
+  margin: 0 24px;
+  flex-shrink: 0;
+}
