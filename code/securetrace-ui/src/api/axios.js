@@ -17,10 +17,12 @@ api.interceptors.request.use((config) => {
 });
 
 // Interceptor: if API returns 401, clear the token and redirect to login
+// But NOT if we're already on the login page — that would wipe the error message
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isLoginPage = window.location.pathname === '/';
+    if (error.response?.status === 401 && !isLoginPage) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/';
